@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="LiveKernelConvolution">
+      <UniqueIdentifier>{4006437b-d13f-4a2c-80b6-1a92fefc5b64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LiveKernelConvolution\Display">
+      <UniqueIdentifier>{251c26ab-8b6f-498b-bc7c-316c4202967d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LiveKernelConvolution\OpenCL">
+      <UniqueIdentifier>{9436e232-ae8d-4478-906b-37f8b0467ae6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LiveKernelConvolution\Computation">
+      <UniqueIdentifier>{d13dc467-ff41-4fd1-b8b2-fc96bf0bb0fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LiveKernelConvolution\Computation\Operators">
+      <UniqueIdentifier>{31443005-2f9a-4cfa-b507-b3029eb122f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LiveKernelConvolution\Display\ImageSources">
+      <UniqueIdentifier>{10b085a5-5ddc-4e41-97a0-73776a028cee}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GraphicsEngine.cpp">
+      <Filter>LiveKernelConvolution\Display</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageDisplay.cpp">
+      <Filter>LiveKernelConvolution\Display</Filter>
+    </ClCompile>
+    <ClCompile Include="InputRegistry.cpp">
+      <Filter>LiveKernelConvolution\Display</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenCLData.cc">
+      <Filter>LiveKernelConvolution\OpenCL</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenCLStuff.cc">
+      <Filter>LiveKernelConvolution\OpenCL</Filter>
+    </ClCompile>
+    <ClCompile Include="SharedImage.cpp">
+      <Filter>LiveKernelConvolution\Computation</Filter>
+    </ClCompile>
+    <ClCompile Include="Kernels.cc">
+      <Filter>LiveKernelConvolution\OpenCL</Filter>
+    </ClCompile>
+    <ClCompile Include="ConvolutionOperator.cpp">
+      <Filter>LiveKernelConvolution\Computation\Operators</Filter>
+    </ClCompile>
+    <ClCompile Include="Operator.cpp">
+      <Filter>LiveKernelConvolution\Computation\Operators</Filter>
+    </ClCompile>
+    <ClCompile Include="SequenceOperator.cpp">
+      <Filter>LiveKernelConvolution\Computation\Operators</Filter>
+    </ClCompile>
+    <ClCompile Include="Profiler.cpp">
+      <Filter>LiveKernelConvolution\Computation</Filter>
+    </ClCompile>
+    <ClCompile Include="TestingKernelsClass.cc" />
+    <ClCompile Include="ImageDisplayManager.cpp">
+      <Filter>LiveKernelConvolution\Display</Filter>
+    </ClCompile>
+    <ClCompile Include="LiveKernelConvolution.cpp" />
+    <ClCompile Include="ImageSource.cpp">
+      <Filter>LiveKernelConvolution\Display\ImageSources</Filter>
+    </ClCompile>
+    <ClCompile Include="OCVVideoCapture.cpp">
+      <Filter>LiveKernelConvolution\Display\ImageSources</Filter>
+    </ClCompile>
+    <ClCompile Include="FileImageSource.cpp">
+      <Filter>LiveKernelConvolution\Display\ImageSources</Filter>
+    </ClCompile>
+    <ClCompile Include="Kernel.cpp">
+      <Filter>LiveKernelConvolution\Computation</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GraphicsEngine.hpp">
+      <Filter>LiveKernelConvolution\Display</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageDisplay.hpp">
+      <Filter>LiveKernelConvolution\Display</Filter>
+    </ClInclude>
+    <ClInclude Include="InputRegistry.hpp">
+      <Filter>LiveKernelConvolution\Display</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenCLData.h">
+      <Filter>LiveKernelConvolution\OpenCL</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenCLStuff.h">
+      <Filter>LiveKernelConvolution\OpenCL</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedImage.hpp">
+      <Filter>LiveKernelConvolution\Computation</Filter>
+    </ClInclude>
+    <ClInclude Include="Kernels.h">
+      <Filter>LiveKernelConvolution\OpenCL</Filter>
+    </ClInclude>
+    <ClInclude Include="ConvolutionOperator.hpp">
+      <Filter>LiveKernelConvolution\Computation\Operators</Filter>
+    </ClInclude>
+    <ClInclude Include="Operator.hpp">
+      <Filter>LiveKernelConvolution\Computation\Operators</Filter>
+    </ClInclude>
+    <ClInclude Include="SequenceOperator.hpp">
+      <Filter>LiveKernelConvolution\Computation\Operators</Filter>
+    </ClInclude>
+    <ClInclude Include="Profiler.hpp">
+      <Filter>LiveKernelConvolution\Computation</Filter>
+    </ClInclude>
+    <ClInclude Include="TestingKernelsClass.h" />
+    <ClInclude Include="ImageDisplayManager.hpp">
+      <Filter>LiveKernelConvolution\Display</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageSource.hpp">
+      <Filter>LiveKernelConvolution\Display\ImageSources</Filter>
+    </ClInclude>
+    <ClInclude Include="OCVVideoCapture.hpp">
+      <Filter>LiveKernelConvolution\Display\ImageSources</Filter>
+    </ClInclude>
+    <ClInclude Include="FileImageSource.hpp">
+      <Filter>LiveKernelConvolution\Display\ImageSources</Filter>
+    </ClInclude>
+    <ClInclude Include="Kernel.hpp">
+      <Filter>LiveKernelConvolution\Computation</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
