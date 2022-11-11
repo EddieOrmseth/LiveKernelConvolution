@@ -5,8 +5,6 @@
 #include <functional>
 #include "GraphicsEngine.hpp"
 
-//void handleSourcesFunc(ImageDisplayManager* manager);
-
 class Operator;
 class ImageSource;
 class SharedImage;
@@ -18,16 +16,16 @@ public:
 	friend void handlerOperatorsData(ImageDisplayManager* manager);
 	friend void handlerOperatorsProcess(ImageDisplayManager* manager);
 
-
 	ImageDisplayManager(ImageSource* imageSource, std::vector<Operator*> operators);
 	~ImageDisplayManager();
 
 	void paint(Gdiplus::Graphics* graphics);
 
 	void startHandleThreads();
-	//void handleSources(); // DOES NOT END!
 
 	void upate();
+
+	double getOverallFps();
 
 private:
 
@@ -44,5 +42,8 @@ private:
 	std::queue<Operator*> processQueue;
 	std::mutex* displayMutex;
 	std::queue<Operator*> displayQueue;
+
+	int framesCompleted;
+	std::chrono::high_resolution_clock::time_point startTime;
 
 };

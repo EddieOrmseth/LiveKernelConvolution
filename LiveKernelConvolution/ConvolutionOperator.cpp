@@ -73,11 +73,15 @@ ConvolutionOperator::ConvolutionOperator(SharedImage* input, SharedImage* output
 
 void ConvolutionOperator::setKernelFinished() {
 	kernelFinished = true;
+	framesCompleted++;
+	std::chrono::high_resolution_clock::time_point now = std::chrono::high_resolution_clock::now();
+	totalMilliseconds += std::chrono::duration_cast<std::chrono::milliseconds>(now - startTime).count();
 	finishOperation();
 }
 
 void ConvolutionOperator::startOperation() {
 	kernelFinished = false;
+	startTime = std::chrono::high_resolution_clock::now();
 
 	result |= clEnqueueWriteBuffer(openCLInfo->commandQueue, input->getOpenCLMatrix()->data.buffer, CL_FALSE, 0, input->getOpenCLMatrix()->data.bufferRawSize, input->getOpenCLMatrix()->data.hostData, 0, 0, &afterRead);
 	result |= clEnqueueNDRangeKernel(openCLInfo->commandQueue, kernel, 2,  workOffset, globalWorKSize, localWorKSize, 1, &afterRead, &afterAlg);
@@ -88,4 +92,12 @@ void ConvolutionOperator::startOperation() {
 
 bool ConvolutionOperator::isFinished() {
 	return Operator::isFinished();
+}
+
+int ConvolutionOperator::getFramesCompleted() {
+	return framesCompleted;
+}
+
+long long ConvolutionOperator::getTotalMilliseconds() {
+	return totalMilliseconds;
 }

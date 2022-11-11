@@ -2,6 +2,7 @@
 #include "Operator.hpp"
 #include "SharedImage.hpp"
 #include "OpenCLStuff.h"
+#include <chrono>
 
 class Kernel;
 
@@ -44,6 +45,9 @@ public:
 
 	bool isFinished();
 
+	int getFramesCompleted();
+	long long getTotalMilliseconds();
+
 private:
 
 	int result = 0;
@@ -59,6 +63,10 @@ private:
 	size_t* workOffset;
 	size_t* globalWorKSize;
 	size_t* localWorKSize;
+
+	std::chrono::high_resolution_clock::time_point startTime;
+	int framesCompleted;
+	long long totalMilliseconds = 0;
 
 };
 

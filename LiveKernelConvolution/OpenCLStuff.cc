@@ -5,7 +5,18 @@
 #define CL_HPP_ENABLE_EXCEPTIONS // Error handling
 
 OpenCLInfo* OpenCLSetup(int platformNum, int deviceNum, const char** kernels, int kernelCount) {
+    int result = 0;
+    return OpenCLSetup(platformNum, deviceNum, kernels, kernelCount, &result);
+}
+
+OpenCLInfo* OpenCLSetup(int platformNum, int deviceNum, const char** kernels, int kernelCount, int* resultPtr) {
     OpenCLInfo* openCLInfo = (OpenCLInfo*)malloc(sizeof(OpenCLInfo));
+    OpenCLSetupDeviceAndPlatorm(openCLInfo, platformNum, deviceNum, resultPtr);
+    OpenCLSetupContextProgramAndQueue(openCLInfo, 0, kernels, kernelCount, 0, resultPtr);
+    return openCLInfo;
+}
+
+OpenCLInfo* OpenCLSetupDeviceAndPlatorm(OpenCLInfo* openCLInfo, int platformNum, int deviceNum, int* resultPtr) {
     int result = 0;
 
     cl_uint numPlatforms = 0;
@@ -43,15 +54,23 @@ OpenCLInfo* OpenCLSetup(int platformNum, int deviceNum, const char** kernels, in
     }
     cl_device_id device = devices[deviceNum];
 
+    openCLInfo->platform = platform;
+    openCLInfo->device = device;
 
+    *resultPtr = result;
+    return openCLInfo;
+}
 
-    cl_context context = clCreateContext(0, 1, devices, NULL, NULL, &result);
+OpenCLInfo* OpenCLSetupContextProgramAndQueue(OpenCLInfo* openCLInfo, const cl_context_properties* contextProperties, const char** kernels, int kernelCount, const cl_queue_properties* commandQueueProperties, int* resultPtr) {
+    int result = 0;
+
+    cl_context context = clCreateContext(contextProperties, 1, &openCLInfo->device, NULL, NULL, &result);
     if (result != CL_SUCCESS) { // !context
         printf("Error: Failed to create a compute context!\n");
         return nullptr;
     }
 
-    cl_command_queue commandQueue = clCreateCommandQueueWithProperties(context, device, 0, &result);
+    cl_command_queue commandQueue = clCreateCommandQueueWithProperties(context, openCLInfo->device, commandQueueProperties, &result);
     if (result != CL_SUCCESS) { // !commandQueue
         printf("Error: Failed to create a command commands!\n");
         return nullptr;
@@ -62,28 +81,28 @@ OpenCLInfo* OpenCLSetup(int platformNum, int deviceNum, const char** kernels, in
         printf("Error: Failed to create compute program!\n");
         return nullptr;
     }
-    result = clBuildProgram(program, 1, &device, NULL, NULL, NULL);
+    result = clBuildProgram(program, 1, &openCLInfo->device, NULL, NULL, NULL);
     if (result != CL_SUCCESS) {
         printf("Error: Failed to build program!\n");
         cl_program_build_info info;
         size_t paramSize = 0;
-        result = clGetProgramBuildInfo(program, device, CL_PROGRAM_BUILD_LOG, NULL, NULL, &paramSize);
+        result = clGetProgramBuildInfo(program, openCLInfo->device, CL_PROGRAM_BUILD_LOG, NULL, NULL, &paramSize);
         if (result != CL_SUCCESS) {
             printf("Error: Failed to retrieve build error message length!\n");
             return nullptr;
         }
         char* message = (char*)malloc(paramSize);
-        result = clGetProgramBuildInfo(program, device, CL_PROGRAM_BUILD_LOG, paramSize, message, NULL);
+        result = clGetProgramBuildInfo(program, openCLInfo->device, CL_PROGRAM_BUILD_LOG, paramSize, message, NULL);
         printf(message); printf("\n");
         return nullptr;
     }
 
-    openCLInfo->platform = platform;
-    openCLInfo->device = device;
+
     openCLInfo->context = context;
     openCLInfo->program = program;
     openCLInfo->commandQueue = commandQueue;
 
+    *resultPtr = result;
     return openCLInfo;
 }
 

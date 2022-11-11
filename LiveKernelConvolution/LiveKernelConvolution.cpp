@@ -19,7 +19,7 @@ void KernelTest();
 void DisplayCaptureTest();
 void DisplayCaptureTest(SharedImage* img);
 void testBlur();
-void runProgram();
+void RunProgram();
 
 int main() {
     std::cout << "Hello World!\n";
@@ -27,7 +27,7 @@ int main() {
     //KernelTest();
     //DisplayCaptureTest();
     //testBlur();
-    runProgram();
+    RunProgram();
 
     std::cout << "Goodbye World!\n";
 }
@@ -398,7 +398,7 @@ void testBlur() {
     std::cout << "Result of Write: " << writeResult << "\n";
 }
 
-void runProgram() {
+void RunProgram() {
     int result = 0;
 
     cv::Mat* mat = new cv::Mat();
@@ -407,7 +407,11 @@ void runProgram() {
     camera->read(*mat);
 
     initializeKernels();
-    OpenCLInfo* openCLInfo = OpenCLSetup(0, 0, kernels, NumberOfKernels);
+    //OpenCLInfo* openCLInfo = OpenCLSetup(1, 0, kernels, NumberOfKernels);
+    OpenCLInfo* openCLInfo = (OpenCLInfo*)malloc(sizeof(OpenCLInfo));
+    openCLInfo = OpenCLSetupDeviceAndPlatorm(openCLInfo, 0, 0, &result);
+    const cl_queue_properties properties = cl_queue_properties(CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE);
+    openCLInfo = OpenCLSetupContextProgramAndQueue(openCLInfo, 0, kernels, NumberOfKernels, &properties, &result);
 
     cl_ulong size;
     clGetDeviceInfo(openCLInfo->device, CL_DEVICE_LOCAL_MEM_SIZE, sizeof(cl_ulong), &size, 0);
@@ -417,7 +421,7 @@ void runProgram() {
     cl_int iRows = mat->rows;
     cl_int kernelDim = 21;
     cl_int stride = 1;
-    cl_int sectors = 100;
+    cl_int sectors = 25;
     cl_int numChannels = 3;
 
     ConvolutionInfo* convInfo = new ConvolutionInfo(iCols, iRows, kernelDim, stride, numChannels, sectors, openCLInfo);
@@ -478,8 +482,6 @@ void runProgram() {
 
     writeData(*openCLInfo, kernelDat);
 
-    //cl_kernel kernel = clCreateKernel(openCLInfo->program, nameOfConvolutionOperator, &result);
-
     std::vector<Operator*> operators = std::vector<Operator*>();
     int numOperators = 5;
     for (int i = 0; i < numOperators; i++) {
@@ -505,5 +507,19 @@ void runProgram() {
         TranslateMessage(&messages);
         DispatchMessage(&messages);
     }
+
+    std::cout << "FPS:\tProcess: " << dispManager->getOverallFps() << "\tPainting: " << graphicsEngine->getObservedFPS() << std::endl;
+
+    int totalFrames = 0;
+    long long totalMilliseconds = 0;
+
+    for (int i = 0; i < operators.size(); i++) {
+        totalFrames += ((ConvolutionOperator*)operators[0])->getFramesCompleted();
+        totalMilliseconds += ((ConvolutionOperator*)operators[0])->getTotalMilliseconds();
+    }
+
+    double totalSeconds = totalMilliseconds / 1000.0;
+    double algFPS = totalFrames / totalSeconds;
+    std::cout << "Algorithm FPS: " << algFPS << std::endl;
 
 }

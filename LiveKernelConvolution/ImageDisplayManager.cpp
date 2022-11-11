@@ -52,6 +52,9 @@ void ImageDisplayManager::paint(Gdiplus::Graphics* graphics) {
 }
 
 void handlerOperatorsData(ImageDisplayManager* manager) {
+
+	manager->startTime = std::chrono::high_resolution_clock::now();
+
 	while (manager->run) {
 		if (manager->dataQueue.size() > 0) {
 			manager->dataMutex->lock();
@@ -95,6 +98,7 @@ void handlerOperatorsProcess(ImageDisplayManager* manager) {
 				manager->displayMutex->lock();
 				manager->displayQueue.push(op);
 				manager->displayMutex->unlock();
+				manager->framesCompleted++;
 			}
 		}
 	}
@@ -106,12 +110,15 @@ void ImageDisplayManager::startHandleThreads() {
 	processHandleThread = std::thread(handlerOperatorsProcess, this);
 }
 
-//void ImageDisplayManager::handleSources() {
-//	//handleSourcesFunc(this);
-//}
-
 void ImageDisplayManager::upate() {
 	for (int i = 0; i < operators.size(); i++) {
 		operators[i]->isFinished();
 	}
+}
+
+double ImageDisplayManager::getOverallFps() {
+	std::chrono::high_resolution_clock::time_point now = std::chrono::high_resolution_clock::now();
+	auto delta = now - startTime;
+	double seconds = std::chrono::duration_cast<std::chrono::milliseconds>(delta).count() / 1000.0;
+	return framesCompleted / seconds;
 }

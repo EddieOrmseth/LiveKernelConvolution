@@ -60,7 +60,7 @@ private:
 	int x;
 	int y;
 
-	int timePerFrame = 1; // milliseconds
+	int timePerFrame = 5; // milliseconds
 
 	WNDCLASS windowClass;
 	HWND windowHandle;
